@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CEO SANG PENJAGA GALAXY - MODE SULIT</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        body {
+            background-color: #050510;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        #top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right));
+            pointer-events: none;
+        }
+
+        .hud-text {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 700;
+            text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+            color: #ffcccc;
+        }
+
+        .modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 450px;
+            background: rgba(30, 5, 10, 0.85);
+            padding: clamp(30px, 6vw, 50px);
+            border-radius: 24px;
+            text-align: center;
+            border: 2px solid rgba(255, 0, 85, 0.5);
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.2), inset 0 0 20px rgba(255, 0, 85, 0.1);
+            pointer-events: auto;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+            opacity: 0;
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff0000;
+            text-transform: uppercase;
+            font-weight: 900;
+            line-height: 1.1;
+            overflow-wrap: break-word;
+        }
+
+        p {
+            font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+            margin-bottom: 30px;
+            color: #ffb3b3;
+            line-height: 1.6;
+        }
+        
+        .highlight-text {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .hard-text {
+            color: #ff3333;
+            font-weight: 900;
+            letter-spacing: 2px;
+            animation: pulseText 1s infinite alternate;
+        }
+
+        @keyframes pulseText {
+            from { text-shadow: 0 0 5px #ff0000; }
+            to { text-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000; }
+        }
+
+        .final-score-text {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: #00ffff;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff0055, #ff9900);
+            color: white;
+            border: none;
+            padding: clamp(15px, 4vw, 20px) clamp(30px, 6vw, 50px);
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+            transition: transform 0.1s, box-shadow 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
+        }
+        
+        button:active {
+            transform: translateY(2px) scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="ui-layer">
+        <div id="top-bar">
+            <div class="hud-text">SKOR: <span id="scoreEl">0</span></div>
+            <div class="hud-text">LEVEL: <span id="levelEl">1</span></div>
+        </div>
+        
+        <div id="start-menu" class="modal">
+            <h1>CEO SANG<br>PENJAGA GALAXY</h1>
+            <p class="hard-text">[ MODE SULIT ]</p>
+            <p>Geser untuk bergerak & menembak.<br>Bertahanlah dari serangan tanpa henti!</p>
+            <button id="start-btn">Tempur</button>
+        </div>
+
+        <div id="game-over-menu" class="modal hidden">
+            <h1>Permainan Berakhir</h1>
+            <div class="final-score-text">Skor Akhir: <span id="finalScoreEl">0</span></div>
+            <button id="restart-btn">Main Lagi</button>
+        </div>
+
+        <div id="level-complete-menu" class="modal hidden">
+            <h1 style="text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;">Level <span id="completedLevelEl">1</span><br>Selesai!</h1>
+            <p>Target Tercapai! Kecepatan meningkat.</p>
+            <button id="next-level-btn">Level Selanjutnya</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); 
+
+        const scoreEl = document.getElementById('scoreEl');
+        const levelEl = document.getElementById('levelEl');
+        const finalScoreEl = document.getElementById('finalScoreEl');
+        const completedLevelEl = document.getElementById('completedLevelEl');
+        
+        const startMenu = document.getElementById('start-menu');
+        const gameOverMenu = document.getElementById('game-over-menu');
+        const levelCompleteMenu = document.getElementById('level-complete-menu');
+        
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const nextLevelBtn = document.getElementById('next-level-btn');
+
+        let canvasWidth, canvasHeight;
+        let scaleRatio = 1;
+
+        function resizeCanvas() {
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = canvasWidth * dpr;
+            canvas.height = canvasHeight * dpr;
+            
+            canvas.style.width = `${canvasWidth}px`;
+            canvas.style.height = `${canvasHeight}px`;
+            
+            ctx.scale(dpr, dpr);
+            
+            scaleRatio = Math.min(canvasWidth / 400, canvasHeight / 800);
+            scaleRatio = Math.max(0.6, Math.min(scaleRatio, 1.5)); 
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let gameActive = false;
+        let score = 0;
+        let level = 1;
+        let targetScore = 250; // Hard Mode Target
+        let frameCount = 0;
+        let animationId;
+        
+        let player;
+        let projectiles = [];
+        let enemies = [];
+        let particles = [];
+        let stars = [];
+        let powerUps = []; 
+        let weaponType = 'single';
+
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const touchOffsetY = isTouchDevice ? 80 : 0; 
+        let mouse = { x: canvasWidth / 2, y: canvasHeight - 150, isDown: false };
+
+        let audioCtx;
+        let masterGain;
+        let bgmTimer;
+        let nextNoteTime = 0;
+        let noteIndex = 0;
+        // Faster, aggressive bassline for hard mode
+        const bgmNotes = [110.00, 110.00, 123.47, 130.81, 110.00, 98.00, 146.83, 130.81];
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = 0.2; 
+                masterGain.connect(audioCtx.destination);
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playLaser() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.connect(gain);
+            gain.connect(masterGain);
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(110, now + 0.1);
+            gain.gain.setValueAtTime(0.3, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        }
+
+        function playExplosion(isBig = false) {
+            if (!audioCtx) return;
+            const duration = isBig ? 1.2 : 0.3;
+            const bufferSize = audioCtx.sampleRate * duration;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; 
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = isBig ? 300 : 800; // slightly grittier
+            const gain = audioCtx.createGain();
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(masterGain);
+            const now = audioCtx.currentTime;
+            gain.gain.setValueAtTime(isBig ? 0.8 : 0.5, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            noise.start(now);
+            noise.stop(now + duration);
+        }
+
+        function playPowerUpSound() {
+            if (!audioCtx) return;
+            const notes = [440, 554.37, 659.25, 880, 1046.50]; 
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.connect(gain);
+                gain.connect(masterGain);
+                const now = audioCtx.currentTime + (i * 0.05);
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.4, now + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            });
+        }
+
+        function playVictorySound() {
+            if (!audioCtx) return;
+            const notes = [440, 554.37, 659.25, 880]; 
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.connect(gain);
+                gain.connect(masterGain);
+                const now = audioCtx.currentTime + (i * 0.15);
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.4, now + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            });
+        }
+
+        function scheduleBGM() {
+            if (!gameActive || !audioCtx) return;
+            const scheduleAheadTime = 0.1; 
+            while (nextNoteTime < audioCtx.currentTime + scheduleAheadTime) {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.value = bgmNotes[noteIndex];
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 800; // Hard mode: brighter bass
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(masterGain);
+                gain.gain.setValueAtTime(0.18, nextNoteTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, nextNoteTime + 0.12);
+                osc.start(nextNoteTime);
+                osc.stop(nextNoteTime + 0.12);
+                nextNoteTime += 0.12; // Faster tempo
+                noteIndex = (noteIndex + 1) % bgmNotes.length;
+            }
+            bgmTimer = setTimeout(scheduleBGM, 20.0); 
+        }
+
+        class PowerUp {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type; // 'double' or 'spread'
+                this.radius = 20 * scaleRatio;
+                this.velocity = { x: 0, y: 4 * scaleRatio }; // Drops faster in hard mode
+                this.pulse = 0;
+            }
+
+            draw() {
+                this.pulse += 0.15;
+                const glow = 15 + Math.sin(this.pulse) * 10;
+                
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                const color = this.type === 'double' ? '#0077ff' : '#ffff00';
+                const text = this.type === 'double' ? 'D' : 'S';
+                
+                ctx.beginPath();
+                ctx.roundRect(-this.radius, -this.radius, this.radius * 2, this.radius * 2, 5 * scaleRatio);
+                ctx.fillStyle = color;
+                ctx.shadowBlur = glow;
+                ctx.shadowColor = color;
+                ctx.fill();
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${22 * scaleRatio}px Orbitron`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowBlur = 0; 
+                ctx.fillText(text, 0, 1 * scaleRatio); 
+                
+                ctx.restore();
+            }
+
+            update() {
+                this.y += this.velocity.y;
+                this.draw();
+            }
+        }
+
+        class Player {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 90 * scaleRatio;  
+                this.height = 70 * scaleRatio; 
+                this.radius = 20 * scaleRatio; // Tighter hitbox for hard mode
+            }
+
+            drawRoundel(x, y, radius) {
+                ctx.fillStyle = '#00205B';
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                const spikes = 5;
+                const outerRadius = radius * 0.8;
+                const innerRadius = radius * 0.35;
+                let rot = Math.PI / 2 * 3;
+                let step = Math.PI / spikes;
+                ctx.moveTo(x, y - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(x + Math.cos(rot) * outerRadius, y + Math.sin(rot) * outerRadius);
+                    rot += step;
+                    ctx.lineTo(x + Math.cos(rot) * innerRadius, y + Math.sin(rot) * innerRadius);
+                    rot += step;
+                }
+                ctx.lineTo(x, y - outerRadius);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                const s = scaleRatio;
+
+                // Propeller animation based on frameCount
+                const propAlpha = (Math.sin(frameCount * 0.5) * 0.3) + 0.4;
+                const propWidth = (Math.cos(frameCount * 1.5) * 35) * s;
+                
+                // Propeller blur
+                ctx.fillStyle = `rgba(255, 255, 255, ${propAlpha})`;
+                ctx.beginPath();
+                ctx.ellipse(0, -32 * s, Math.abs(propWidth), 4 * s, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Propeller hub
+                ctx.fillStyle = '#222';
+                ctx.beginPath();
+                ctx.arc(0, -28 * s, 4 * s, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Main Wings (Olive Green)
+                ctx.fillStyle = '#556B2F'; 
+                ctx.strokeStyle = '#2A3310';
+                ctx.lineWidth = 1.5 * s;
+                ctx.beginPath();
+                ctx.moveTo(-45 * s, 0 * s);
+                ctx.lineTo(45 * s, 0 * s);
+                ctx.lineTo(35 * s, 12 * s);
+                ctx.lineTo(-35 * s, 12 * s);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Tail Wings
+                ctx.beginPath();
+                ctx.moveTo(-15 * s, 28 * s);
+                ctx.lineTo(15 * s, 28 * s);
+                ctx.lineTo(10 * s, 34 * s);
+                ctx.lineTo(-10 * s, 34 * s);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // Tail Fin
+                ctx.fillStyle = '#4A5D23';
+                ctx.beginPath();
+                ctx.moveTo(-2 * s, 18 * s);
+                ctx.lineTo(2 * s, 18 * s);
+                ctx.lineTo(2 * s, 35 * s);
+                ctx.lineTo(-2 * s, 35 * s);
+                ctx.closePath();
+                ctx.fill();
+
+                // Fuselage
+                ctx.fillStyle = '#4A5D23'; 
+                ctx.beginPath();
+                ctx.ellipse(0, 5 * s, 10 * s, 30 * s, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Cockpit
+                ctx.fillStyle = '#87CEEB'; 
+                ctx.beginPath();
+                ctx.ellipse(0, -2 * s, 5 * s, 10 * s, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#111';
+                ctx.lineWidth = 1 * s;
+                ctx.stroke();
+                
+                // Decals (Stars on wings)
+                this.drawRoundel(-30 * s, 6 * s, 5 * s);
+                this.drawRoundel(30 * s, 6 * s, 5 * s);
+
+                // Guns
+                ctx.fillStyle = '#444';
+                ctx.fillRect(-12 * s, -12 * s, 3 * s, 8 * s);
+                ctx.fillRect(9 * s, -12 * s, 3 * s, 8 * s);
+
+                ctx.restore();
+            }
+
+            update() {
+                // Smooth follow mouse/finger
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                
+                this.x += dx * 0.25; // Faster response in hard mode
+                this.y += dy * 0.25;
+
+                // Screen bounds
+                if (this.x < this.width / 2) this.x = this.width / 2;
+                if (this.x > canvasWidth - this.width / 2) this.x = canvasWidth - this.width / 2;
+                if (this.y < this.height / 2) this.y = this.height / 2;
+                if (this.y > canvasHeight - this.height / 2) this.y = canvasHeight - this.height / 2;
+
+                this.draw();
+            }
+        }
+
+        class Projectile {
+            constructor(x, y, velocity, color = '#00ffff') {
+                this.x = x;
+                this.y = y;
+                this.velocity = velocity;
+                this.radius = 4 * scaleRatio;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; 
+            }
+            update() {
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.draw();
+            }
+        }
+
+        class Enemy {
+            constructor(x, y, radius, velocity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius * scaleRatio;
+                this.velocity = velocity;
+                // Grittier colors for hard mode
+                this.color = `hsl(${Math.random() * 40}, 80%, 45%)`; 
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+                this.vertices = [];
+                const points = 7;
+                for (let i = 0; i < points; i++) {
+                    const angle = (i / points) * Math.PI * 2;
+                    const dist = this.radius * (0.6 + Math.random() * 0.5); 
+                    this.vertices.push({ x: Math.cos(angle) * dist, y: Math.sin(angle) * dist });
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.beginPath();
+                ctx.moveTo(this.vertices[0].x, this.vertices[0].y);
+                for (let i = 1; i < this.vertices.length; i++) {
+                    ctx.lineTo(this.vertices[i].x, this.vertices[i].y);
+                }
+                ctx.closePath();
+                ctx.fillStyle = '#1a0505';
+                ctx.fill();
+                ctx.lineWidth = 2 * scaleRatio;
+                ctx.strokeStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.stroke();
+                ctx.restore();
+            }
+            update() {
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.rotation += this.rotationSpeed;
+                this.draw();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, radius, velocity, color) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius * scaleRatio;
+                this.velocity = velocity;
+                this.color = color;
+                this.alpha = 1; 
+                this.friction = 0.98; 
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.02; 
+                this.draw();
+            }
+        }
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvasWidth;
+                this.y = Math.random() * canvasHeight;
+                this.size = (Math.random() * 1.5) * scaleRatio;
+                this.speed = (Math.random() * 3 + 1) * scaleRatio; // Faster stars
+                this.alpha = Math.random();
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+            update() {
+                this.y += this.speed;
+                if (this.y > canvasHeight) {
+                    this.y = 0;
+                    this.x = Math.random() * canvasWidth;
+                }
+                this.draw();
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            const starCount = isTouchDevice ? 100 : 200; 
+            for(let i = 0; i < starCount; i++) stars.push(new Star());
+        }
+
+        function createParticles(x, y, color, count = 15) {
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const power = (Math.random() * 8 + 2) * scaleRatio; // Bigger blast
+                const velocity = { x: Math.cos(angle) * power, y: Math.sin(angle) * power };
+                particles.push(new Particle(x, y, Math.random() * 3 + 1, velocity, color));
+            }
+        }
+
+        function spawnEnemy() {
+            const radius = Math.random() * (40 - 15) + 15; // Slightly smaller, harder to hit
+            let x, y;
+            if (Math.random() < 0.8) {
+                // Mostly from top
+                x = Math.random() * canvasWidth;
+                y = -radius * scaleRatio;
+            } else {
+                // Sometimes sides
+                x = Math.random() < 0.5 ? -radius * scaleRatio : canvasWidth + radius * scaleRatio;
+                y = Math.random() * (canvasHeight * 0.3); 
+            }
+            const angle = Math.atan2(canvasHeight + 100 - y, (canvasWidth/2) - x);
+            const variance = (Math.random() - 0.5) * 0.8; 
+            
+            // HARD MODE: High base speed (3.5 to 7.0), steep level multiplier
+            const speedMultiplier = 1 + (level * 0.3);
+            const speed = (Math.random() * 3.5 + 3.5) * speedMultiplier * scaleRatio;
+            
+            const velocity = { x: Math.cos(angle + variance) * speed, y: Math.sin(angle + variance) * speed };
+            enemies.push(new Enemy(x, y, radius, velocity));
+        }
+
+        function shoot() {
+            if (!gameActive) return;
+            playLaser();
+            const speed = -15 * scaleRatio; // Faster bullets
+            
+            if (weaponType === 'single') {
+                projectiles.push(
+                    new Projectile(player.x, player.y - player.radius, { x: 0, y: speed })
+                );
+            } else if (weaponType === 'double') {
+                const offset = 15 * scaleRatio;
+                projectiles.push(
+                    new Projectile(player.x - offset, player.y - player.radius, { x: 0, y: speed }, '#0077ff'),
+                    new Projectile(player.x + offset, player.y - player.radius, { x: 0, y: speed }, '#0077ff')
+                );
+            } else if (weaponType === 'spread') {
+                projectiles.push(
+                    new Projectile(player.x, player.y - player.radius, { x: 0, y: speed }, '#ffff00'),
+                    new Projectile(player.x - 12 * scaleRatio, player.y - player.radius, { x: -4 * scaleRatio, y: speed }, '#ffff00'),
+                    new Projectile(player.x + 12 * scaleRatio, player.y - player.radius, { x: 4 * scaleRatio, y: speed }, '#ffff00')
+                );
+            }
+        }
+
+        function animate() {
+            if (!gameActive) return;
+            animationId = requestAnimationFrame(animate);
+
+            // Clear Screen with trailing effect
+            ctx.fillStyle = 'rgba(5, 5, 16, 0.4)';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            
+            frameCount++;
+
+            // Draw Background and Player
+            stars.forEach(star => star.update());
+            player.update();
+
+            // HARD MODE: Spawn Enemies (~400ms base, faster per level)
+            // 24 frames at 60fps = 400ms. Scales down as level goes up.
+            const spawnRate = Math.max(8, 24 - (level * 2));
+            if (frameCount % spawnRate === 0) spawnEnemy();
+
+            // Auto Shoot when moving/holding (Faster fire rate for hard mode)
+            if (frameCount % 8 === 0 && mouse.isDown) shoot();
+
+            // Update Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                if (particles[i].alpha <= 0) particles.splice(i, 1);
+                else particles[i].update();
+            }
+
+            // Update and Render PowerUps
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                let pu = powerUps[i];
+                pu.update();
+                
+                const distToPlayer = Math.hypot(player.x - pu.x, player.y - pu.y);
+                if (distToPlayer < pu.radius + player.radius) {
+                    weaponType = pu.type; 
+                    playPowerUpSound();
+                    
+                    const particleColor = pu.type === 'double' ? '#0077ff' : '#ffff00';
+                    createParticles(pu.x, pu.y, particleColor, 30);
+                    
+                    powerUps.splice(i, 1);
+                } 
+                else if (pu.y > canvasHeight + pu.radius) {
+                    powerUps.splice(i, 1);
+                }
+            }
+
+            // Update Projectiles
+            for (let i = projectiles.length - 1; i >= 0; i--) {
+                let p = projectiles[i];
+                p.update();
+                if (p.x < 0 || p.x > canvasWidth || p.y < 0 || p.y > canvasHeight) {
+                    projectiles.splice(i, 1);
+                }
+            }
+
+            // Reverse Loop for accurate Collisions
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                let enemy = enemies[i];
+                enemy.update();
+
+                // Player Death Collision
+                const distToPlayer = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+                if (distToPlayer < enemy.radius + (player.radius * 0.7)) {
+                    endGame();
+                    return; 
+                }
+
+                // Projectile Hits
+                let enemyDestroyed = false;
+                for (let j = projectiles.length - 1; j >= 0; j--) {
+                    let projectile = projectiles[j];
+                    const distToProj = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+                    
+                    if (distToProj < enemy.radius + projectile.radius) {
+                        playExplosion();
+                        createParticles(enemy.x, enemy.y, enemy.color, 20);
+                        createParticles(enemy.x, enemy.y, '#ffffff', 8);
+
+                        // HARD MODE: Only 10% chance to drop Power-Up!
+                        if (Math.random() < 0.10) {
+                            const type = Math.random() < 0.5 ? 'double' : 'spread';
+                            powerUps.push(new PowerUp(enemy.x, enemy.y, type));
+                        }
+
+                        score += 10; 
+                        scoreEl.innerText = score;
+
+                        enemies.splice(i, 1);
+                        projectiles.splice(j, 1);
+                        enemyDestroyed = true;
+
+                        if (score >= targetScore) endLevel();
+                        break; 
+                    }
+                }
+
+                if (!enemyDestroyed && enemy.y > canvasHeight + enemy.radius) {
+                    enemies.splice(i, 1);
+                }
+            }
+        }
+
+        function startGame() {
+            initAudio(); 
+            startMenu.classList.add('hidden');
+            gameOverMenu.classList.add('hidden');
+            levelCompleteMenu.classList.add('hidden');
+            
+            player = new Player(canvasWidth / 2, canvasHeight - 150);
+            mouse.x = canvasWidth / 2;
+            mouse.y = canvasHeight - 150;
+            
+            projectiles = [];
+            enemies = [];
+            particles = [];
+            powerUps = []; 
+            initStars();
+            
+            score = 0;
+            level = 1;
+            weaponType = 'single'; 
+            targetScore = level * 250; // Hard Mode Target
+            scoreEl.innerHTML = score;
+            levelEl.innerHTML = level;
+            frameCount = 0;
+            
+            gameActive = true;
+            if(audioCtx) {
+                clearTimeout(bgmTimer);
+                nextNoteTime = audioCtx.currentTime + 0.1;
+                noteIndex = 0;
+                scheduleBGM();
+            }
+            animate();
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearTimeout(bgmTimer); 
+            playExplosion(true); 
+            cancelAnimationFrame(animationId);
+            
+            createParticles(player.x, player.y, '#ff0000', 80);
+            
+            ctx.fillStyle = 'rgba(20, 0, 0, 0.6)';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            particles.forEach(p => p.update());
+
+            setTimeout(() => {
+                finalScoreEl.innerHTML = score;
+                gameOverMenu.classList.remove('hidden');
+            }, 1000); 
+        }
+
+        function endLevel() {
+            gameActive = false;
+            clearTimeout(bgmTimer);
+            playVictorySound();
+            cancelAnimationFrame(animationId);
+            
+            enemies = [];
+            projectiles = [];
+            powerUps = []; 
+            
+            ctx.fillStyle = 'rgba(0, 20, 0, 0.4)';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            
+            completedLevelEl.innerText = level;
+            setTimeout(() => {
+                levelCompleteMenu.classList.remove('hidden');
+            }, 600);
+        }
+
+        function startNextLevel() {
+            levelCompleteMenu.classList.add('hidden');
+            level++;
+            targetScore = level * 250; 
+            levelEl.innerHTML = level;
+            
+            player.x = canvasWidth / 2;
+            player.y = canvasHeight - 150;
+            mouse.x = canvasWidth / 2;
+            mouse.y = canvasHeight - 150;
+            mouse.isDown = false;
+            
+            gameActive = true;
+            if(audioCtx) {
+                clearTimeout(bgmTimer);
+                nextNoteTime = audioCtx.currentTime + 0.1;
+                noteIndex = 0;
+                scheduleBGM();
+            }
+            animate();
+        }
+
+        function handleMove(clientX, clientY) {
+            mouse.x = clientX;
+            mouse.y = Math.max(0, clientY - touchOffsetY);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            if(gameActive) handleMove(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            if(gameActive) {
+                mouse.isDown = true;
+                handleMove(e.clientX, e.clientY);
+            }
+        });
+        window.addEventListener('mouseup', () => { mouse.isDown = false; });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!gameActive) return;
+            e.preventDefault(); 
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+
+        window.addEventListener('touchstart', (e) => {
+            if (!gameActive) return;
+            if (e.target === canvas) e.preventDefault(); 
+            mouse.isDown = true; 
+            handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: false });
+        
+        window.addEventListener('touchend', () => { mouse.isDown = false; });
+
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        nextLevelBtn.addEventListener('click', startNextLevel);
+
+        // Initial draw for background
+        initStars();
+        ctx.fillStyle = '#050510';
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        stars.forEach(s => s.draw());
+
+    </script>
+</body>
+</html>
