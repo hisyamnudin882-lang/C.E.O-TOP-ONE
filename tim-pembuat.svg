@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;display=swap');
+      
+      .game-title { 
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 900; 
+          font-size: 34px; 
+          fill: url(#textGrad); 
+          text-anchor: middle; 
+          filter: url(#glow); 
+          letter-spacing: 4px; 
+      }
+      .header-title { 
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 900; 
+          font-size: 20px; 
+          fill: #00ffff; 
+          text-anchor: middle; 
+          letter-spacing: 3px; 
+      }
+      .dosen { 
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 700; 
+          font-size: 16px; 
+          fill: #ff0055; 
+          text-anchor: middle; 
+          letter-spacing: 1px; 
+      }
+      .section-title { 
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 700; 
+          font-size: 16px; 
+          fill: #ffaa00; 
+          text-anchor: middle; 
+          letter-spacing: 2px; 
+      }
+      .member { 
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 700; 
+          font-size: 15px; 
+          fill: #ffffff; 
+          text-anchor: middle; 
+          letter-spacing: 1px; 
+      }
+      .member-highlight { 
+          fill: #aaddff; 
+          font-weight: 400;
+      }
+      .footer {
+          font-family: 'Orbitron', sans-serif; 
+          font-weight: 400; 
+          font-size: 14px; 
+          fill: #88aaff; 
+          text-anchor: middle; 
+          letter-spacing: 2px;
+      }
+    </style>
+    
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="iconGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00ffff" />
+      <stop offset="100%" stop-color="#ff0055" />
+    </linearGradient>
+
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00ffff" />
+      <stop offset="100%" stop-color="#0099ff" />
+    </linearGradient>
+
+    <!-- Background Galaksi -->
+    <radialGradient id="galaxyBg" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#0f0c29" />
+      <stop offset="50%" stop-color="#302b63" />
+      <stop offset="100%" stop-color="#000000" />
+    </radialGradient>
+  </defs>
+
+  <!-- Latar Belakang Luar Angkasa -->
+  <rect width="100%" height="100%" fill="url(#galaxyBg)" />
+
+  <!-- Bintang-Bintang Latar -->
+  <g fill="#ffffff" opacity="0.8">
+    <circle cx="120" cy="80" r="2" filter="url(#glow)"/>
+    <circle cx="850" cy="150" r="1.5" />
+    <circle cx="780" cy="600" r="2.5" filter="url(#glow)"/>
+    <circle cx="200" cy="550" r="1" />
+    <circle cx="450" cy="100" r="2" opacity="0.5"/>
+    <circle cx="900" cy="350" r="1.5" />
+    <circle cx="50" cy="400" r="2" filter="url(#glow)"/>
+    <circle cx="550" cy="650" r="1" />
+  </g>
+
+  <g fill="#00ffff" opacity="0.5">
+    <circle cx="300" cy="200" r="2" filter="url(#glow)"/>
+    <circle cx="700" cy="450" r="1.5" />
+  </g>
+  
+  <g fill="#ff0055" opacity="0.5">
+    <circle cx="800" cy="250" r="2" filter="url(#glow)"/>
+    <circle cx="250" cy="480" r="1.5" />
+  </g>
+
+  <!-- Panel Futuristik Utama (Lebar Ekstra) -->
+  <path d="M 150 40 L 850 40 L 930 120 L 930 640 L 850 700 L 150 700 L 70 640 L 70 120 Z" fill="rgba(5, 5, 15, 0.85)" stroke="#00ffff" stroke-width="3" filter="url(#glow)"/>
+  
+  <!-- Garis Aksen Dalam -->
+  <path d="M 160 55 L 840 55 L 910 125 L 910 635 L 840 690 L 160 690 L 90 635 L 90 125 Z" fill="none" stroke="#ff0055" stroke-width="1.5" opacity="0.8"/>
+
+  <!-- Ornaments -->
+  <path d="M 70 140 L 70 120 L 90 100" fill="none" stroke="#ffffff" stroke-width="3" />
+  <path d="M 930 620 L 930 640 L 910 660" fill="none" stroke="#ffffff" stroke-width="3" />
+
+  <!-- ICON TIM PEMBUAT (4 STICK FIGURES EMBRACING SHOULDERS) -->
+  <g transform="translate(435, 70) scale(0.65)" fill="url(#iconGrad)" stroke="url(#iconGrad)" filter="url(#iconGlow)">
+    <!-- Heads -->
+    <circle cx="48" cy="40" r="18" stroke="none" />
+    <circle cx="84" cy="32" r="18" stroke="none" />
+    <circle cx="120" cy="32" r="18" stroke="none" />
+    <circle cx="156" cy="40" r="18" stroke="none" />
+
+    <!-- Shoulder Hugging Arch -->
+    <path d="M 28,74 Q 48,56 84,52 Q 102,50 120,52 Q 156,56 176,74" fill="none" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Outer Left Arm -->
+    <path d="M 36,68 Q 22,92 14,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+    <!-- Outer Right Arm -->
+    <path d="M 168,68 Q 182,92 190,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+    <!-- Torsos -->
+    <path d="M 34,64 L 60,62 L 54,120 L 30,120 Z" stroke="none" />
+    <path d="M 66,58 L 96,58 L 94,120 L 68,120 Z" stroke="none" />
+    <path d="M 108,58 L 138,58 L 136,120 L 110,120 Z" stroke="none" />
+    <path d="M 144,62 L 170,64 L 174,120 L 150,120 Z" stroke="none" />
+
+    <!-- Legs -->
+    <path d="M 35,116 L 18,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 50,116 L 48,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 73,116 L 71,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 89,116 L 87,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 114,116 L 112,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 130,116 L 128,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 153,116 L 151,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 168,116 L 185,176" fill="none" stroke-width="15" stroke-linecap="round" />
+  </g>
+
+  <!-- Teks Header -->
+  <text x="500" y="215" class="header-title">TUGAS KELOMPOK DESAIN WEB</text>
+  <text x="500" y="250" class="dosen">Dosen Pengampu: Bpk. Rosidin, M.Kom</text>
+
+  <!-- Garis Pemisah Atas -->
+  <line x1="250" y1="280" x2="750" y2="280" stroke="#00ffff" stroke-width="1" opacity="0.5" filter="url(#glow)"/>
+
+  <!-- Judul Game -->
+  <text x="500" y="340" class="game-title">CEO SANG PENJAGA GALAXY</text>
+
+  <!-- Garis Pemisah Bawah -->
+  <line x1="250" y1="385" x2="750" y2="385" stroke="#00ffff" stroke-width="1" opacity="0.5" filter="url(#glow)"/>
+
+  <!-- Daftar Anggota -->
+  <text x="500" y="435" class="section-title">ANGGOTA KELOMPOK:</text>
+  
+  <text x="500" y="475" class="member">1. ABDUL ROHMAN <tspan class="member-highlight">| NIM: 43240329 | Kelas: SI_KIP_4B_2024</tspan></text>
+  <text x="500" y="510" class="member">2. MUHAMMAD HISYAM NUDIN <tspan class="member-highlight">| NIM: 43240455 | Kelas: SI_KIP_4B_2024</tspan></text>
+  <text x="500" y="545" class="member">3. TIO PRAMUDIYA BERLIYANA <tspan class="member-highlight">| NIM: 43240444 | Kelas: SI_KIP_4B_2024</tspan></text>
+  <text x="500" y="580" class="member">4. DIKRI FAUZAN ANNAWAWI <tspan class="member-highlight">| NIM: 43240366 | Kelas: SI_KIP_4B_2024</tspan></text>
+
+  <!-- Footer Institusi -->
+  <text x="500" y="650" class="footer">Sistem Informasi - STMIK IKMI Cirebon</text>
+</svg>

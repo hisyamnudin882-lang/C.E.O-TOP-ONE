@@ -31,6 +31,8 @@
             touch-action: none;
         }
 
+        body.team-design-open { touch-action: pan-x pan-y pinch-zoom; }
+
         canvas {
             display: block;
             position: absolute;
@@ -122,7 +124,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             gap: clamp(10px, 1.8vh, 18px);
             text-align: center;
         }
@@ -191,6 +193,178 @@
         }
 
         .game-guide li + li { margin-top: 4px; }
+
+        .modal > :first-child { margin-top: auto; }
+        .modal > :last-child { margin-bottom: auto; }
+
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        #team-open-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 18px;
+            width: 48%;
+            min-height: 52px;
+            margin: 0;
+            border: 2px solid #00ffff;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #092742, #104373);
+            box-shadow: 0 0 18px rgba(0, 255, 255, 0.35);
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: clamp(0.72rem, 2.2vw, 0.9rem);
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            pointer-events: auto;
+        }
+
+        #team-open-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 28px rgba(0, 255, 255, 0.75);
+            background: linear-gradient(135deg, #0d385f, #155796);
+        }
+
+        #team-open-btn:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        #team-open-btn svg {
+            display: block;
+            width: 28px;
+            height: 28px;
+            color: #00ffff;
+            filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.8));
+            flex-shrink: 0;
+        }
+
+        #start-menu button#start-btn {
+            flex: 1;
+            margin-top: 0;
+            padding: 12px 18px;
+        }
+
+        button.btn-secondary {
+            background: linear-gradient(135deg, #092742, #104373);
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 16px rgba(0, 255, 255, 0.35);
+            color: #ffffff;
+        }
+
+        button.btn-secondary:hover {
+            background: linear-gradient(135deg, #0d385f, #155796);
+            box-shadow: 0 0 24px rgba(0, 255, 255, 0.7);
+        }
+
+        button#continue-btn {
+            background: linear-gradient(90deg, #00c853, #64dd17);
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.6);
+            margin-top: 0;
+            padding: 12px 18px;
+            flex: 1;
+        }
+
+        button#continue-btn:hover {
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.9);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .saved-progress-box {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px dashed #00ffff;
+            border-radius: 10px;
+            background: rgba(0, 40, 80, 0.5);
+            color: #00ffff;
+            font-size: clamp(0.76rem, 2.4vw, 0.88rem);
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+        }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        #team-design-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            place-items: center;
+            padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            background: rgba(2, 3, 12, 0.88);
+            pointer-events: auto;
+            touch-action: pan-x pan-y pinch-zoom;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .team-design-panel {
+            position: relative;
+            width: min(960px, 100%, calc(143vh - 92px));
+            width: min(960px, 100%, calc(143dvh - 92px));
+            max-height: calc(100vh - 24px);
+            max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+            overflow: auto;
+            border: 1px solid rgba(0, 255, 255, 0.75);
+            border-radius: 16px;
+            background: #050510;
+            box-shadow: 0 0 34px rgba(0, 255, 255, 0.22), 0 0 34px rgba(255, 0, 85, 0.16);
+            overscroll-behavior: contain;
+            touch-action: pan-x pan-y pinch-zoom;
+        }
+
+        .team-design-panel img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        #team-close-btn {
+            position: absolute;
+            z-index: 1;
+            top: 14px;
+            right: 14px;
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            min-height: 42px;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #fff;
+            background: rgba(5, 5, 16, 0.9);
+            box-shadow: 0 0 14px rgba(0, 255, 255, 0.4);
+            font-size: 26px;
+            line-height: 1;
+        }
+
+        .team-design-hint {
+            display: none;
+            padding: 8px 12px;
+            color: #c9ffff;
+            font: 12px/1.4 Arial, sans-serif;
+            text-align: center;
+        }
 
         button {
             background: linear-gradient(90deg, #ff0055, #ff9900);
@@ -266,7 +440,9 @@
 
             #start-menu { gap: 10px; }
             #start-menu .game-guide { padding: 9px 12px; }
-            #start-menu button { margin-top: 0; }
+            .modal-actions { flex-direction: column; width: 100%; gap: 10px; }
+            #team-open-btn, #start-menu button#start-btn { width: 100% !important; min-width: 100% !important; flex: none !important; margin: 0 !important; border-radius: 50px !important; }
+            #team-open-btn svg { width: 22px !important; height: 22px !important; }
 
             h1 { font-size: clamp(1.55rem, 8vw, 2.25rem); }
 
@@ -283,12 +459,171 @@
             button { min-height: 42px; margin-top: 2px; padding: 10px 22px; }
         }
 
+        @media (max-width: 600px) and (max-height: 650px) {
+            #start-menu { gap: 7px; padding: 12px 14px; }
+            #start-menu h1 { font-size: clamp(1.35rem, 7vw, 1.8rem); line-height: 1.05; }
+            #start-menu .hard-text { font-size: 0.8rem; }
+            #start-menu > p:not(.hard-text) { font-size: 0.8rem; line-height: 1.35; }
+            #start-menu .game-guide { padding: 7px 9px; }
+            #start-menu .game-guide h2 { margin-bottom: 4px; font-size: 0.72rem; }
+            #start-menu .game-guide ul { font-size: 0.7rem; line-height: 1.25; }
+            #start-menu .game-guide li + li { margin-top: 2px; }
+            #start-menu button { min-height: 42px; padding: 9px 20px; font-size: 0.95rem; }
+        }
+
+        @media (max-width: 600px) {
+            .team-design-panel { width: 100%; }
+            .team-design-panel img,
+            .team-design-hint { width: 100%; max-width: 100%; }
+            .team-design-panel { overflow: auto; }
+            .team-design-hint { display: block; }
+            #team-close-btn { top: 8px; right: 8px; width: 38px; height: 38px; min-height: 38px; }
+        }
+
         @media (min-width: 601px) and (max-height: 760px) {
             #start-menu { gap: 12px; padding: 20px 26px; }
             #start-menu h1 { font-size: clamp(1.7rem, 3vw, 2.2rem); }
             #start-menu .game-guide { padding: 10px 12px; }
             #start-menu .game-guide ul { font-size: 0.82rem; line-height: 1.35; }
+            #start-menu .creator-credit { padding: 8px 10px; }
             #start-menu button { margin-top: 0; }
+        }
+        /* Tampilan Khusus Laptop, Desktop, & PC (Wide Screen) */
+        @media (min-width: 769px) {
+            .modal {
+                width: min(680px, 90vw);
+                max-width: 680px;
+                padding: 36px 42px;
+                border-radius: 26px;
+                background: radial-gradient(circle at 50% 0%, rgba(24, 18, 48, 0.96) 0%, rgba(7, 5, 20, 0.98) 100%);
+                border: 1.5px solid rgba(0, 255, 255, 0.5);
+                box-shadow: 
+                    0 25px 70px rgba(0, 0, 0, 0.85),
+                    0 0 45px rgba(0, 255, 255, 0.25),
+                    0 0 80px rgba(255, 0, 85, 0.15),
+                    inset 0 0 30px rgba(0, 255, 255, 0.08);
+                gap: 22px;
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                animation: desktopModalEntrance 0.35s cubic-bezier(0.16, 1, 0.3, 1) ease-out;
+            }
+
+            @keyframes desktopModalEntrance {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -46%) scale(0.96);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+            }
+
+            h1 {
+                font-size: clamp(2.2rem, 3.5vw, 3rem);
+                letter-spacing: 3px;
+                line-height: 1.25;
+                color: #ffffff;
+                text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 40px #ff0000;
+            }
+
+            .hard-text {
+                font-size: 1.05rem;
+                letter-spacing: 3px;
+                color: #ff4d6d;
+            }
+
+            p {
+                font-size: 1.02rem;
+                color: #e2e8f0;
+                line-height: 1.6;
+                padding: 0 15px;
+            }
+
+            .game-guide {
+                padding: 18px 24px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, rgba(0, 30, 60, 0.7) 0%, rgba(2, 18, 38, 0.8) 100%);
+                border: 1px solid rgba(0, 255, 255, 0.45);
+                box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08), 0 8px 22px rgba(0, 0, 0, 0.35);
+            }
+
+            .game-guide h2 {
+                font-size: 1.05rem;
+                letter-spacing: 2.5px;
+                color: #00ffff;
+                margin-bottom: 10px;
+                text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            }
+
+            .game-guide ul {
+                font-size: 0.92rem;
+                line-height: 1.6;
+            }
+
+            .game-guide li + li {
+                margin-top: 6px;
+            }
+
+            .saved-progress-box {
+                padding: 10px 22px;
+                font-size: 0.95rem;
+                border-radius: 50px;
+                background: linear-gradient(90deg, rgba(0, 50, 100, 0.7), rgba(0, 35, 75, 0.8));
+                border: 1px solid rgba(0, 255, 255, 0.6);
+                box-shadow: 0 0 16px rgba(0, 255, 255, 0.3);
+            }
+
+            .modal-actions {
+                gap: 16px;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            #team-open-btn {
+                flex: 1;
+                width: auto;
+                min-height: 54px;
+                padding: 14px 22px;
+                font-size: 0.95rem;
+                letter-spacing: 2px;
+                border-radius: 50px;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.35);
+                transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, background 0.2s ease;
+            }
+
+            #team-open-btn:hover {
+                transform: translateY(-3px) scale(1.03);
+                box-shadow: 0 0 32px rgba(0, 255, 255, 0.85);
+            }
+
+            #start-menu button#start-btn,
+            button#continue-btn,
+            #pause-menu button,
+            #game-over-menu button,
+            #level-complete-menu button {
+                flex: 1;
+                width: auto;
+                margin-top: 0;
+                min-height: 54px;
+                font-size: 1.05rem;
+                letter-spacing: 2.5px;
+                border-radius: 50px;
+                transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, background 0.2s ease;
+            }
+
+            button:hover {
+                transform: translateY(-3px) scale(1.03);
+                box-shadow: 0 0 35px rgba(255, 0, 85, 0.85);
+            }
+
+            button.btn-secondary:hover {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.85);
+            }
+
+            button#continue-btn:hover {
+                box-shadow: 0 0 35px rgba(0, 230, 118, 0.95);
+            }
         }
     </style>
 </head>
@@ -332,26 +667,88 @@
                     <li><strong>Jeda:</strong> tekan Esc atau ikon jeda; pilih Lanjutkan untuk kembali.</li>
                 </ul>
             </div>
-            <button id="start-btn">Tempur</button>
+            <div id="saved-progress-box" class="saved-progress-box hidden">
+                ⭐ Progres Tersimpan: <strong>Level <span id="savedLevelNum">1</span></strong>
+            </div>
+            <div class="modal-actions">
+                <button id="continue-btn" type="button" class="hidden">Lanjut Level 1</button>
+                <button id="team-open-btn" type="button" aria-label="Lihat tim pembuat" title="Lihat Tim Pembuat" aria-haspopup="dialog" aria-controls="team-design-modal">
+                    <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+                        <g fill="currentColor" stroke="currentColor">
+                            <!-- Heads -->
+                            <circle cx="48" cy="40" r="18" stroke="none" />
+                            <circle cx="84" cy="32" r="18" stroke="none" />
+                            <circle cx="120" cy="32" r="18" stroke="none" />
+                            <circle cx="156" cy="40" r="18" stroke="none" />
+
+                            <!-- Shoulder Hugging Arch -->
+                            <path d="M 28,74 Q 48,56 84,52 Q 102,50 120,52 Q 156,56 176,74" fill="none" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- Outer Left Arm -->
+                            <path d="M 36,68 Q 22,92 14,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+                            <!-- Outer Right Arm -->
+                            <path d="M 168,68 Q 182,92 190,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+                            <!-- Torsos -->
+                            <path d="M 34,64 L 60,62 L 54,120 L 30,120 Z" stroke="none" />
+                            <path d="M 66,58 L 96,58 L 94,120 L 68,120 Z" stroke="none" />
+                            <path d="M 108,58 L 138,58 L 136,120 L 110,120 Z" stroke="none" />
+                            <path d="M 144,62 L 170,64 L 174,120 L 150,120 Z" stroke="none" />
+
+                            <!-- Legs -->
+                            <path d="M 35,116 L 18,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 50,116 L 48,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 73,116 L 71,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 89,116 L 87,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 114,116 L 112,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 130,116 L 128,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 153,116 L 151,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                            <path d="M 168,116 L 185,176" fill="none" stroke-width="15" stroke-linecap="round" />
+                        </g>
+                    </svg>
+                    <span>TIM PEMBUAT</span>
+                </button>
+                <button id="start-btn" type="button">Tempur</button>
+            </div>
+        </div>
+
+        <div id="team-design-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Desain anggota kelompok pembuat game" aria-hidden="true">
+            <div class="team-design-panel">
+                <button id="team-close-btn" type="button" aria-label="Tutup desain" title="Tutup">×</button>
+                <img src="tim-pembuat.svg" alt="Desain tugas kelompok berisi judul game, nama anggota beserta NIM dan kelas, nama dosen, serta institusi." />
+                <p class="team-design-hint">Desain ditampilkan utuh. Perbesar layar jika ingin membaca detail.</p>
+            </div>
         </div>
 
         <div id="pause-menu" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="pause-title">
             <h1 id="pause-title">Game Dijeda</h1>
             <p>Level dan progresmu tersimpan. Lanjutkan kapan saja.</p>
-            <button id="resume-btn" type="button">Lanjutkan</button>
+            <div id="pause-save-toast" style="display:none;width:100%;text-align:center;color:#00ffff;font-size:0.82rem;letter-spacing:1px;padding:6px 10px;border-radius:8px;background:rgba(0,40,80,0.6);border:1px dashed #00ffff;">✅ Progres tersimpan!</div>
+            <div class="modal-actions">
+                <button id="resume-btn" type="button">Lanjutkan</button>
+                <button id="pause-home-btn" type="button" class="btn-secondary">🏠 Beranda</button>
+            </div>
         </div>
 
         <div id="game-over-menu" class="modal hidden">
             <h1>Permainan Berakhir</h1>
             <div class="final-score-text">Gugur di Level: <span id="finalLevelEl">1</span></div>
-            <button id="restart-btn">Main Lagi</button>
+            <p style="font-size:0.85rem;color:#ff9999;">Progres levelmu masih tersimpan. Kamu bisa lanjut dari beranda.</p>
+            <div class="modal-actions">
+                <button id="restart-btn" type="button">Main Lagi</button>
+                <button id="gameover-home-btn" type="button" class="btn-secondary">🏠 Beranda</button>
+            </div>
         </div>
 
         <div id="level-complete-menu" class="modal hidden">
             <h1 style="text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;">Raja Hancur!</h1>
             <div class="final-score-text">Level <span id="completedLevelEl">1</span> Selesai!</div>
             <p>Bersiap untuk ancaman yang lebih kuat.</p>
-            <button id="next-level-btn">Level Selanjutnya</button>
+            <div class="modal-actions">
+                <button id="next-level-btn" type="button">Level Selanjutnya</button>
+                <button id="levelcomplete-home-btn" type="button" class="btn-secondary">🏠 Beranda</button>
+            </div>
         </div>
     </div>
 
@@ -380,15 +777,24 @@
         const levelContainer = document.getElementById('levelContainer');
         
         const startMenu = document.getElementById('start-menu');
+        const teamDesignModal = document.getElementById('team-design-modal');
         const pauseMenu = document.getElementById('pause-menu');
         const gameOverMenu = document.getElementById('game-over-menu');
         const levelCompleteMenu = document.getElementById('level-complete-menu');
         
         const startBtn = document.getElementById('start-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        const teamOpenBtn = document.getElementById('team-open-btn');
+        const teamCloseBtn = document.getElementById('team-close-btn');
         const resumeBtn = document.getElementById('resume-btn');
         const restartBtn = document.getElementById('restart-btn');
         const nextLevelBtn = document.getElementById('next-level-btn');
         const stopBtn = document.getElementById('stop-btn');
+        const pauseHomeBtn = document.getElementById('pause-home-btn');
+        const gameoverHomeBtn = document.getElementById('gameover-home-btn');
+        const levelcompleteHomeBtn = document.getElementById('levelcomplete-home-btn');
+        const savedProgressBox = document.getElementById('saved-progress-box');
+        const savedLevelNum = document.getElementById('savedLevelNum');
 
         const bgmMusic = document.getElementById('bgmAudio'); bgmMusic.volume = 0.6;
         const gameOverMusic = document.getElementById('gameOverAudio'); gameOverMusic.volume = 0.8;
@@ -1210,7 +1616,58 @@
             }
         }
 
-        function startGame() {
+        function saveLevelProgress(lvl) {
+            if (lvl && lvl > 1) {
+                localStorage.setItem('ceo_saved_level', lvl);
+            }
+        }
+
+        function getSavedLevelProgress() {
+            const val = localStorage.getItem('ceo_saved_level');
+            return val ? parseInt(val, 10) : 1;
+        }
+
+        function updateSavedProgressUI() {
+            const savedLvl = getSavedLevelProgress();
+            if (savedLvl > 1) {
+                if (savedLevelNum) savedLevelNum.innerText = savedLvl;
+                if (savedProgressBox) savedProgressBox.classList.remove('hidden');
+                if (continueBtn) {
+                    continueBtn.innerText = `Lanjut Level ${savedLvl}`;
+                    continueBtn.classList.remove('hidden');
+                }
+                if (startBtn) startBtn.innerText = 'Main Dari Awal';
+            } else {
+                if (savedProgressBox) savedProgressBox.classList.add('hidden');
+                if (continueBtn) continueBtn.classList.add('hidden');
+                if (startBtn) startBtn.innerText = 'Tempur';
+            }
+        }
+
+        function goToHome() {
+            if (level > 1) saveLevelProgress(level);
+            gamePaused = false;
+            setGameActive(false);
+            cancelAnimationFrame(animationId);
+            bgmMusic.pause();
+            gameOverMusic.pause();
+            mouse.isDown = false;
+            gamepadShooting = false;
+            
+            pauseMenu.classList.add('hidden');
+            gameOverMenu.classList.add('hidden');
+            levelCompleteMenu.classList.add('hidden');
+            teamDesignModal.classList.add('hidden');
+            bossWarning.classList.add('hidden');
+            
+            darahContainer.classList.add('invisible');
+            levelContainer.classList.add('invisible');
+            
+            updateSavedProgressUI();
+            startMenu.classList.remove('hidden');
+        }
+
+        function startGame(startFromSaved = false) {
             initAudio(); 
             
             gameOverMusic.pause();
@@ -1239,7 +1696,13 @@
             powerUps = []; 
             initStars();
             
-            level = 1;
+            if (startFromSaved) {
+                level = getSavedLevelProgress();
+            } else {
+                level = 1;
+                localStorage.removeItem('ceo_saved_level');
+            }
+            saveLevelProgress(level);
             updateBossImage(); 
             weaponType = 'single'; 
             playerHp = playerMaxHp; 
@@ -1283,16 +1746,6 @@
             }, 1000); 
         }
 
-        function pauseGame() {
-            if (!gameActive) return;
-            gamePaused = true;
-            setGameActive(false);
-            cancelAnimationFrame(animationId);
-            bgmMusic.pause();
-            mouse.isDown = false;
-            gamepadShooting = false;
-            pauseMenu.classList.remove('hidden');
-        }
 
         function resumeGame() {
             if (!gamePaused) return;
@@ -1324,6 +1777,7 @@
         function startNextLevel() {
             levelCompleteMenu.classList.add('hidden');
             level++;
+            saveLevelProgress(level);
             levelEl.innerHTML = level;
             
             updateBossImage(); 
@@ -1383,20 +1837,95 @@
 
         darahContainer.classList.add('invisible');
         levelContainer.classList.add('invisible');
-        startBtn.addEventListener('click', startGame);
-        restartBtn.addEventListener('click', startGame);
+
+        // --- Event Listeners ---
+        startBtn.addEventListener('click', () => startGame(false));
+        if (continueBtn) continueBtn.addEventListener('click', () => startGame(true));
+        restartBtn.addEventListener('click', () => startGame(false));
         nextLevelBtn.addEventListener('click', startNextLevel);
         stopBtn.addEventListener('click', pauseGame);
         resumeBtn.addEventListener('click', resumeGame);
 
-        window.addEventListener('keydown', (e) => {
+        // Tombol Beranda di semua menu
+        if (pauseHomeBtn) pauseHomeBtn.addEventListener('click', () => {
+            goToHome();
+        });
+        if (gameoverHomeBtn) gameoverHomeBtn.addEventListener('click', () => {
+            goToHome();
+        });
+        if (levelcompleteHomeBtn) levelcompleteHomeBtn.addEventListener('click', () => {
+            goToHome();
+        });
+
+        // Toast notifikasi simpan di pause menu
+        const pauseSaveToast = document.getElementById('pause-save-toast');
+        function showSaveToast() {
+            if (!pauseSaveToast) return;
+            pauseSaveToast.style.display = 'block';
+            pauseSaveToast.style.opacity = '1';
+            clearTimeout(pauseSaveToast._hideTimer);
+            pauseSaveToast._hideTimer = setTimeout(() => {
+                pauseSaveToast.style.transition = 'opacity 0.5s';
+                pauseSaveToast.style.opacity = '0';
+                setTimeout(() => { pauseSaveToast.style.display = 'none'; pauseSaveToast.style.transition = ''; }, 500);
+            }, 2500);
+        }
+
+        // Tampilkan toast saat pause
+        function pauseGame() {
+            if (!gameActive) return;
+            saveLevelProgress(level);
+            gamePaused = true;
+            setGameActive(false);
+            cancelAnimationFrame(animationId);
+            bgmMusic.pause();
+            mouse.isDown = false;
+            gamepadShooting = false;
+            pauseMenu.classList.remove('hidden');
+            showSaveToast();
+        }
+        // Re-bind stop button and keydown with new pauseGame that shows toast
+        stopBtn.removeEventListener('click', pauseGame);
+        stopBtn.addEventListener('click', pauseGame);
+        window.removeEventListener('keydown', window._keyHandler);
+        window._keyHandler = (e) => {
+            if (e.key === 'Escape' && !teamDesignModal.classList.contains('hidden')) {
+                e.preventDefault();
+                closeTeamDesign();
+                return;
+            }
             if (e.key === 'Escape' && (gameActive || gamePaused)) {
                 e.preventDefault();
                 if (gameActive) pauseGame();
                 else resumeGame();
             }
+        };
+        window.addEventListener('keydown', window._keyHandler);
+
+        function openTeamDesign() {
+            startMenu.classList.add('hidden');
+            document.body.classList.add('team-design-open');
+            teamDesignModal.classList.remove('hidden');
+            teamDesignModal.setAttribute('aria-hidden', 'false');
+            teamCloseBtn.focus();
+        }
+
+        function closeTeamDesign() {
+            teamDesignModal.classList.add('hidden');
+            teamDesignModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('team-design-open');
+            startMenu.classList.remove('hidden');
+            teamOpenBtn.focus();
+        }
+
+        teamOpenBtn.addEventListener('click', openTeamDesign);
+        teamCloseBtn.addEventListener('click', closeTeamDesign);
+        teamDesignModal.addEventListener('click', (e) => {
+            if (e.target === teamDesignModal) closeTeamDesign();
         });
 
+        // Inisialisasi awal
+        updateSavedProgressUI();
         initStars();
         ctx.fillStyle = '#050510';
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);

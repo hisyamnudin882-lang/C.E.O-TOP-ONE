@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <g fill="currentColor" stroke="currentColor">
+    <!-- Heads -->
+    <circle cx="48" cy="40" r="18" stroke="none" />
+    <circle cx="84" cy="32" r="18" stroke="none" />
+    <circle cx="120" cy="32" r="18" stroke="none" />
+    <circle cx="156" cy="40" r="18" stroke="none" />
+
+    <!-- Shoulder Hugging Arch across all 4 people -->
+    <path d="M 28,74 Q 48,56 84,52 Q 102,50 120,52 Q 156,56 176,74" fill="none" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Outer Left Arm -->
+    <path d="M 36,68 Q 22,92 14,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+    <!-- Outer Right Arm -->
+    <path d="M 168,68 Q 182,92 190,114" fill="none" stroke-width="14" stroke-linecap="round" />
+
+    <!-- Torsos -->
+    <path d="M 34,64 L 60,62 L 54,120 L 30,120 Z" stroke="none" />
+    <path d="M 66,58 L 96,58 L 94,120 L 68,120 Z" stroke="none" />
+    <path d="M 108,58 L 138,58 L 136,120 L 110,120 Z" stroke="none" />
+    <path d="M 144,62 L 170,64 L 174,120 L 150,120 Z" stroke="none" />
+
+    <!-- Legs -->
+    <!-- Person 1 -->
+    <path d="M 35,116 L 18,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 50,116 L 48,176" fill="none" stroke-width="15" stroke-linecap="round" />
+
+    <!-- Person 2 -->
+    <path d="M 73,116 L 71,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 89,116 L 87,176" fill="none" stroke-width="15" stroke-linecap="round" />
+
+    <!-- Person 3 -->
+    <path d="M 114,116 L 112,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 130,116 L 128,176" fill="none" stroke-width="15" stroke-linecap="round" />
+
+    <!-- Person 4 -->
+    <path d="M 153,116 L 151,176" fill="none" stroke-width="15" stroke-linecap="round" />
+    <path d="M 168,116 L 185,176" fill="none" stroke-width="15" stroke-linecap="round" />
+  </g>
+</svg>
